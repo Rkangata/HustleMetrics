@@ -1,4 +1,4 @@
-HustleMetrics
+HustleMetrics live -  https://rkangata.github.io/HustleMetrics/
 Track Your Side Hustle ROI - Know Where Your Time is Best Invested
 
 A free, open-source side hustle tracker that helps you understand which income streams are most profitable. Built with vanilla JavaScript and Tailwind CSS - runs entirely in your browser.
