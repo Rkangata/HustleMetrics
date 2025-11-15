@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HustleMetrics - Track Your Side Hustle ROI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold">HustleMetrics</h1>
+                    <p class="text-indigo-100 text-sm mt-1">Track your time, maximize your ROI</p>
+                </div>
+                <div class="flex gap-3">
+                    <button id="clearAllBtn"
+                        class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition duration-200 shadow-md flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                            </path>
+                        </svg>
+                        Clear All
+                    </button>
+                    <button id="exportReportBtn"
+                        class="bg-indigo-800 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-900 transition duration-200 shadow-md flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        Export Report
+                    </button>
+                    <button id="addHustleBtn"
+                        class="bg-white text-indigo-600 px-6 py-2 rounded-lg font-semibold hover:bg-indigo-50 transition duration-200 shadow-md">
+                        + Add Hustle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+                <p class="text-gray-500 text-sm font-medium">Total Earned</p>
+                <p id="totalEarned" class="text-3xl font-bold text-gray-800 mt-2">KSh 0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+                <p class="text-gray-500 text-sm font-medium">Total Hours</p>
+                <p id="totalHours" class="text-3xl font-bold text-gray-800 mt-2">0h</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+                <p class="text-gray-500 text-sm font-medium">Average KSh/Hour</p>
+                <p id="avgRate" class="text-3xl font-bold text-gray-800 mt-2">KSh 0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500">
+                <p class="text-gray-500 text-sm font-medium">Active Hustles</p>
+                <p id="activeHustles" class="text-3xl font-bold text-gray-800 mt-2">0</p>
+            </div>
+        </div>
+
+        <!-- Top Performer Alert -->
+        <div id="topPerformer"
+            class="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-500 rounded-lg p-4 mb-8 hidden">
+            <div class="flex items-center">
+                <span class="text-2xl mr-3">🏆</span>
+                <div>
+                    <p class="font-semibold text-gray-800">Top Performer</p>
+                    <p id="topPerformerText" class="text-sm text-gray-600"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hustles Grid -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Hustles</h2>
+            <div id="hustlesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Hustles will be inserted here by JavaScript -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="text-center py-16 hidden">
+                <div class="text-6xl mb-4">💼</div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">No Hustles Yet</h3>
+                <p class="text-gray-500 mb-6">Start tracking your side hustles to see your ROI</p>
+                <button onclick="document.getElementById('addHustleBtn').click()"
+                    class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200">
+                    Add Your First Hustle
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Add Hustle Modal -->
+    <div id="addHustleModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Add New Hustle</h3>
+                <button onclick="closeModal('addHustleModal')"
+                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <form id="addHustleForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Hustle Name *</label>
+                    <input type="text" id="hustleName"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        placeholder="e.g., Freelance Writing" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Category *</label>
+                    <select id="hustleCategory"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        required>
+                        <option value="">Select category</option>
+                        <option value="Freelancing">Freelancing</option>
+                        <option value="Content Creation">Content Creation</option>
+                        <option value="E-commerce">E-commerce</option>
+                        <option value="Consulting">Consulting</option>
+                        <option value="Teaching">Teaching/Tutoring</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2">Color Theme</label>
+                    <div class="flex gap-3">
+                        <label class="color-option"><input type="radio" name="hustleColor" value="blue" checked><span
+                                class="color-circle bg-blue-500"></span></label>
+                        <label class="color-option"><input type="radio" name="hustleColor" value="green"><span
+                                class="color-circle bg-green-500"></span></label>
+                        <label class="color-option"><input type="radio" name="hustleColor" value="purple"><span
+                                class="color-circle bg-purple-500"></span></label>
+                        <label class="color-option"><input type="radio" name="hustleColor" value="pink"><span
+                                class="color-circle bg-pink-500"></span></label>
+                        <label class="color-option"><input type="radio" name="hustleColor" value="orange"><span
+                                class="color-circle bg-orange-500"></span></label>
+                        <label class="color-option"><input type="radio" name="hustleColor" value="red"><span
+                                class="color-circle bg-red-500"></span></label>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeModal('addHustleModal')"
+                        class="flex-1 px-6 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition duration-200">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition duration-200">Create
+                        Hustle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Log Entry Modal -->
+    <div id="logEntryModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Log Entry</h3>
+                <button onclick="closeModal('logEntryModal')"
+                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <form id="logEntryForm">
+                <input type="hidden" id="entryHustleId">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Date *</label>
+                    <input type="date" id="entryDate"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Hours Worked *</label>
+                    <input type="number" id="entryHours" step="0.5" min="0.5"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        placeholder="e.g., 2.5" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Money Earned (Kenya Shillings) *</label>
+                    <input type="number" id="entryEarned" step="0.01" min="0"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        placeholder="e.g., 150.00" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2">Notes (Optional)</label>
+                    <textarea id="entryNotes" rows="3"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        placeholder="What did you work on?"></textarea>
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeModal('logEntryModal')"
+                        class="flex-1 px-6 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition duration-200">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition duration-200">Log
+                        Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hustle Details Modal -->
+    <div id="hustleDetailsModal" class="modal-overlay hidden">
+        <div class="modal-content modal-large">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="detailsHustleName" class="text-2xl font-bold text-gray-800"></h3>
+                <button onclick="closeModal('hustleDetailsModal')"
+                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <p class="text-gray-500 text-sm">Total Earned</p>
+                    <p id="detailsEarned" class="text-2xl font-bold text-gray-800 mt-1">KSh 0</p>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <p class="text-gray-500 text-sm">Total Hours</p>
+                    <p id="detailsHours" class="text-2xl font-bold text-gray-800 mt-1">0h</p>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <p class="text-gray-500 text-sm">Hourly Rate</p>
+                    <p id="detailsRate" class="text-2xl font-bold text-gray-800 mt-1">KSh 0</p>
+                </div>
+            </div>
+
+            <!-- Entries List -->
+            <div class="mb-6">
+                <h4 class="font-semibold text-gray-800 mb-3">Recent Entries</h4>
+                <div id="entriesList" class="space-y-3 max-h-64 overflow-y-auto">
+                    <!-- Entries will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-3">
+                <button onclick="closeModal('hustleDetailsModal')"
+                    class="flex-1 px-6 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition duration-200">Close</button>
+                <button id="deleteHustleBtn"
+                    class="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition duration-200">Delete
+                    Hustle</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
